@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Space Blaster Game</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <img src="logo.png" alt="Game Logo" class="logo" />
+            <h1>Space Blaster</h1>
+        </header>
+
+        <nav>
+            <button onclick="showScreen('welcome')">Welcome</button>
+            <button onclick="showScreen('aboutModal')">About</button>
+        </nav>
+
+        <main>
+            <section id="welcome" class="screen active">
+                <h2>Welcome to Space Blaster!</h2>
+                </br>
+                <p>Created by:</p>
+                </br>
+                <p> Hussein Hasanin| ID : 213971054</p>
+                <p> Dania Dabbah | ID : 214031577</p>
+                </br>
+                <p>Link:</p>
+
+                <div class="button-group">
+                    <button onclick="showScreen('register')">Register</button>
+                    <button onclick="showScreen('login')">Login</button>
+                </div>
+            </section>
+
+            <section id="register" class="screen">
+                <h2>Register</h2>
+                <form id="registerForm" onsubmit="return registerUser()">
+                    <input type="text" id="regUsername" placeholder="Username" required />
+                    <input type="password" id="regPassword" placeholder="Password" required />
+                    <input type="password" id="regConfirmPassword" placeholder="Confirm Password" required />
+                    <input type="text" id="firstName" placeholder="First Name" required />
+                    <input type="text" id="lastName" placeholder="Last Name" required />
+                    <input type="email" id="email" placeholder="Email" required />
+                    <div class="dob">
+                        <select id="dobYear"></select>
+                        <select id="dobMonth"></select>
+                        <select id="dobDay"></select>
+                    </div>
+                    <button type="submit">Register</button>
+                    <button onclick="showScreen('welcome')">Back</button>
+                </form>
+            </section>
+
+            <section id="login" class="screen">
+                <h2>Login</h2>
+                <form id="loginForm" onsubmit="return loginUser()">
+                    <input type="text" id="loginUsername" placeholder="Username" required />
+                    <input type="password" id="loginPassword" placeholder="Password" required />
+                    <button type="submit">Login</button>
+                </form>
+            </section>
+
+            <section id="config" class="screen">
+                <h2>Game Configuration</h2>
+                <form id="configForm" onsubmit="return startGame()">
+                    <label for="shootKey">Select Shooting Key:</label>
+                    <select id="shootKey" required></select>
+
+                    <label for="gameTime">Game Duration (minutes, min 2):</label>
+                    <input type="number" id="gameTime" min="2" value="2" required />
+
+                    <label for="shipColor">Good Spaceship Color:</label>
+                    <input type="color" id="shipColor" value="#00ff00" onchange="updateColorPreview()" />
+                    <div id="colorPreview"
+                        style="display:inline-block; width:20px; height:20px; vertical-align:middle; border:1px solid #000; background-color:#00ff00;">
+                    </div>
+
+                    <button type="submit">Start Game</button>
+                </form>
+            </section>
+
+            <section id="game" class="screen">
+                <h2>Space Blaster</h2>
+                <div id="game-info">
+                    <p>Score: <span id="score">0</span></p>
+                    <p>Lives: <span id="lives">3</span></p>
+                    <p>Time Left: <span id="timeLeft">--:--</span></p>
+                </div>
+                <canvas id="gameCanvas" width="800" height="600"></canvas>
+                <button onclick="startGame()">New Game</button>
+            </section>
+            <script src="game.js"></script>
+
+        </main>
+
+        <footer>
+            <p>© 2025 Space Blaster | Contact: hsen8.hsnen@gmail.com</p>
+        </footer>
+    </div>
+
+    <!-- About Modal -->
+    <div id="aboutModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="hideModal()">&times;</span>
+            <h2>About This Project</h2>
+            <p>Submitters: Hussein Hasanin and Dania Dabbah</p>
+            <p>Used Template: No | jQuery Plugin: No</p>
+            TODO:
+            <p>Difficulties: </p>
+        </div>
+    </div>
+    <audio id="hitSound" src="blocker_hit.ogg"></audio>
+    <audio id="loseSound" src="target_hit.ogg"></audio>
+
+    <script>
+        const users = [{ username: 'p', password: 'testuser' }];
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            if (screenId === 'aboutModal') {
+                document.getElementById('aboutModal').style.display = 'block';
+            } else {
+                document.getElementById(screenId).classList.add('active');
+                document.getElementById('aboutModal').style.display = 'none';
+            }
+        }
+
+        function hideModal() {
+            document.getElementById('aboutModal').style.display = 'none';
+        }
+
+        window.onclick = function (event) {
+            const modal = document.getElementById('aboutModal');
+            if (event.target == modal) modal.style.display = "none";
+        }
+
+        window.onkeydown = function (e) {
+            if (e.key === "Escape") hideModal();
+        }
+
+        function registerUser() {
+            const username = document.getElementById('regUsername').value.trim();
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const email = document.getElementById('email').value.trim();
+
+            const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+            const nameRegex = /^[A-Za-z]+$/;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!username || !password || !confirmPassword || !firstName || !lastName || !email) {
+                alert("All fields must be filled.");
+                return false;
+            }
+
+            if (!passwordRegex.test(password)) {
+                alert("Password must be at least 8 characters long and include both letters and numbers.");
+                return false;
+            }
+
+            if (password !== confirmPassword) {
+                alert("Passwords do not match.");
+                return false;
+            }
+
+            if (!nameRegex.test(firstName) || !nameRegex.test(lastName)) {
+                alert("First and Last names must contain only letters.");
+                return false;
+            }
+
+            if (!emailRegex.test(email)) {
+                alert("Invalid email format.");
+                return false;
+            }
+
+            // Check for duplicate usernames
+            if (users.some(u => u.username === username)) {
+                alert("Username already exists. Please choose another one.");
+                return false;
+            }
+
+            users.push({ username, password });
+            alert("Registration successful!");
+            showScreen('login');
+            return false;
+        }
+
+
+        function loginUser() {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
+
+            const found = users.find(u => u.username === username && u.password === password);
+            if (!found) {
+                alert("Incorrect username or password.");
+                return false;
+            }
+            showScreen('config');
+            return false;
+        }
+        let playerSettings = {};
+
+        function startGame() {
+            const shootKey = document.getElementById('shootKey').value;
+            const gameTime = parseInt(document.getElementById('gameTime').value);
+            const shipColor = document.getElementById('shipColor').value;
+
+            if (isNaN(gameTime) || gameTime < 2) {
+                alert("Game time must be at least 2 minutes.");
+                return false;
+            }
+
+            playerSettings = {
+                shootKey,
+                gameTime,
+                shipColor
+            };
+
+            rungame();
+            showScreen('game');
+            return false;
+        }
+
+        // Fill DOB dropdowns
+        window.onload = function () {
+            const yearSelect = document.getElementById("dobYear");
+            const monthSelect = document.getElementById("dobMonth");
+            const daySelect = document.getElementById("dobDay");
+
+            for (let y = 1970; y <= new Date().getFullYear(); y++) {
+                yearSelect.innerHTML += `<option value="${y}">${y}</option>`;
+            }
+            for (let m = 1; m <= 12; m++) {
+                monthSelect.innerHTML += `<option value="${m}">${m}</option>`;
+            }
+            for (let d = 1; d <= 31; d++) {
+                daySelect.innerHTML += `<option value="${d}">${d}</option>`;
+            }
+        };
+        // Inside window.onload
+        const shootKeySelect = document.getElementById("shootKey");
+
+        // Add Spacebar first
+        const spaceOption = document.createElement("option");
+        spaceOption.value = " ";
+        spaceOption.textContent = "Spacebar";
+        shootKeySelect.appendChild(spaceOption);
+
+        // Add keys A-Z
+        for (let i = 65; i <= 90; i++) {
+            const char = String.fromCharCode(i);
+            const option = document.createElement("option");
+            option.value = char.toLowerCase(); // send lowercase key code
+            option.textContent = char;
+            shootKeySelect.appendChild(option);
+        }
+        function updateColorPreview() {
+            const color = document.getElementById('shipColor').value;
+            document.getElementById('colorPreview').style.backgroundColor = color;
+        }
+
+
+
+    </script>
+</body>
+
+</html>
