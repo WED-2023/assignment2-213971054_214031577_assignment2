@@ -92,7 +92,7 @@
                     <p>Time Left: <span id="timeLeft">--:--</span></p>
                 </div>
                 <canvas id="gameCanvas" width="800" height="600"></canvas>
-                <button onclick="startGame()">New Game</button>
+                <button onclick="showScreen('config')">New Game</button>
             </section>
             <script src="game.js"></script>
 
@@ -152,7 +152,7 @@
             const lastName = document.getElementById('lastName').value.trim();
             const email = document.getElementById('email').value.trim();
 
-            const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+            const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
             const nameRegex = /^[A-Za-z]+$/;
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -188,7 +188,14 @@
             }
 
             users.push({ username, password });
+            localStorage.setItem('users', JSON.stringify(users));
             alert("Registration successful!");
+            document.getElementById('regUsername').value = "";
+            document.getElementById('regPassword').value = "";
+            document.getElementById('regConfirmPassword').value ="";
+            document.getElementById('firstName').value.trim()="";
+            document.getElementById('lastName').value.trim()="";
+            document.getElementById('email').value.trim()="";
             showScreen('login');
             return false;
         }
@@ -197,15 +204,26 @@
         function loginUser() {
             const username = document.getElementById('loginUsername').value.trim();
             const password = document.getElementById('loginPassword').value;
+            const users = JSON.parse(localStorage.getItem('users')) || [];
 
             const found = users.find(u => u.username === username && u.password === password);
             if (!found) {
                 alert("Incorrect username or password.");
                 return false;
             }
+
+            if (currentPlayer !== username) {
+                scoreHistory = [];
+                currentPlayer = username;
+            }
+
+            document.getElementById('loginUsername').value = "";
+            document.getElementById('loginPassword').value = "";
+
             showScreen('config');
             return false;
         }
+
         let playerSettings = {};
 
         function startGame() {
