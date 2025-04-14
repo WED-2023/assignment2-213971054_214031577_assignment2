@@ -93,6 +93,7 @@
                 </div>
                 <canvas id="gameCanvas" width="800" height="600"></canvas>
                 <button onclick="startGame()">New Game</button>
+                <button onclick="backToSettings()">Edit</button>
             </section>
             <script src="game.js"></script>
 
@@ -120,6 +121,11 @@
 
     <script>
         const users = [{ username: 'p', password: 'testuser' }];
+
+        function backToSettings() {
+            clearInterval(gameInterval); 
+            showScreen('config'); 
+        }
 
         function showScreen(screenId) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
