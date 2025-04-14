@@ -92,7 +92,7 @@
                     <p>Time Left: <span id="timeLeft">--:--</span></p>
                 </div>
                 <canvas id="gameCanvas" width="800" height="600"></canvas>
-                <button onclick="showScreen('config')">New Game</button>
+                <button onclick="startGame()">New Game</button>
             </section>
             <script src="game.js"></script>
 
@@ -193,9 +193,9 @@
             document.getElementById('regUsername').value = "";
             document.getElementById('regPassword').value = "";
             document.getElementById('regConfirmPassword').value ="";
-            document.getElementById('firstName').value.trim()="";
-            document.getElementById('lastName').value.trim()="";
-            document.getElementById('email').value.trim()="";
+            document.getElementById('firstName').value="";
+            document.getElementById('lastName').value="";
+            document.getElementById('email').value="";
             showScreen('login');
             return false;
         }
