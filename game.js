@@ -21,6 +21,8 @@ function rungame(fromNewGame = false) {
         clearInterval(gameInterval);
     }
 
+    document.getElementById("backgroundMusic").play();
+
     score = 0;
     lives = 3;
     keysPressed = {};
@@ -28,8 +30,8 @@ function rungame(fromNewGame = false) {
     enemyBullets = [];
     startTime = Date.now();
     player = {
-        x: Math.random() * (canvas.width - 100),
-        y: canvas.height * 0.6,
+        x: Math.random() * (canvas.width - 280),
+        y: canvas.height - 40,
         width: 40,
         height: 40,
         color: playerSettings.shipColor,
@@ -49,8 +51,6 @@ function rungame(fromNewGame = false) {
     gameInterval = setInterval(gameLoop, 1000 / 60);
     updateTimeDisplay();
 }
-
-
 
 function shootBullet() {
     bullets.push({
@@ -112,9 +112,26 @@ function drawPlayer() {
 function movePlayer() {
     if (keysPressed["ArrowLeft"] && player.x > 0) player.x -= player.speed;
     if (keysPressed["ArrowRight"] && player.x < canvas.width - 280) player.x += player.speed;
-    if (keysPressed["ArrowUp"] && player.y > canvas.height * 0.6) player.y -= player.speed;
-    if (keysPressed["ArrowDown"] && player.y < canvas.height - player.height) player.y += player.speed;
+
+    const lowerBound = canvas.height;
+    const upperBound = canvas.height * 0.6;
+
+    if (keysPressed["ArrowUp"] && player.y > upperBound) {
+        player.y -= player.speed;
+    }
+
+    if (keysPressed["ArrowDown"] && player.y + player.height < lowerBound) {
+        player.y += player.speed;
+    }
 }
+function drawRestrictedAreaLine() {
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.3)";
+    ctx.beginPath();
+    ctx.moveTo(0, canvas.height - 280);
+    ctx.lineTo(canvas.width - 280, canvas.height - 280);
+    ctx.stroke();
+}
+
 
 function moveEnemies() {
     let edgeReached = false;
@@ -135,6 +152,7 @@ function moveEnemies() {
 
 function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawRestrictedAreaLine();
 
     movePlayer();
     drawPlayer();
@@ -252,6 +270,8 @@ function updateTimeDisplay() {
 function endGame(reason) {
     clearInterval(gameInterval);
     let msg = "";
+
+    document.getElementById("backgroundMusic").pause();
 
     if (reason === "disqualified") {
         document.getElementById("loseSound").play();

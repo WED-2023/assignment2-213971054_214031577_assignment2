@@ -21,25 +21,24 @@
         </nav>
 
         <main>
-        <section id="welcome" class="screen active">
-            <h2>Welcome to Space Blaster!</h2>
-    
-            <p>Created by:</p>
-            <p>Hussein Hasanin | ID: 213971054</p>
-            <p>Dania Dabbah | ID: 214031577</p>
-    
-            <p>
-                Link: 
-                <a href="https://wed-2023.github.io/assignment2-213971054_214031577_assignment2/" target="_blank">
-                    https://wed-2023.github.io/assignment2-213971054_214031577_assignment2/
-                </a>
-            </p>
-    
-            <div class="button-group">
-                <button onclick="showScreen('register')">Register</button>
-                <button onclick="showScreen('login')">Login</button>
-            </div>
-        </section>
+            <section id="welcome" class="screen active">
+                <h2>Welcome to Space Blaster!</h2>
+
+                <p>Created by:</p>
+                <p>Hussein Hasanin | ID: 213971054</p>
+                <p>Dania Dabbah | ID: 214031577</p>
+                <p>
+                    Link:
+                    <a href="https://wed-2023.github.io/assignment2-213971054_214031577_assignment2/" target="_blank">
+                        Space Blaster
+                    </a>
+                </p>
+
+                <div class="button-group">
+                    <button onclick="showScreen('register')">Register</button>
+                    <button onclick="showScreen('login')">Login</button>
+                </div>
+            </section>
 
             <section id="register" class="screen">
                 <h2>Register</h2>
@@ -108,7 +107,6 @@
         </footer>
     </div>
 
-    <!-- About Modal -->
     <div id="aboutModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="hideModal()">&times;</span>
@@ -116,19 +114,43 @@
             <p>Submitters: Hussein Hasanin and Dania Dabbah</p>
             <p>Used Template: No | jQuery Plugin: No</p>
 
-            <p>Difficulties:
-                Score Table For The Player </p>
+            <p><strong>Game Instructions:</strong></p>
+            <ul>
+                <li>Use the configured shoot key to fire at enemies.</li>
+                <li>Destroy as many enemies as possible to gain a high score.</li>
+                <li>Avoid getting hit—each hit reduces your lives.</li>
+                <li>The game ends when you lose all lives or the timer runs out.</li>
+            </ul>
+
+            <p><strong>Disqualification Rules:</strong></p>
+            <ul>
+                <li>Exiting the game screen before the game ends results in disqualification.</li>
+                <li>Using unauthorized keyboard shortcuts or tampering with the browser console is prohibited.</li>
+            </ul>
+            <p><strong>Game Timer:</strong></p>
+            <ul>
+                <li>The game displays a live countdown timer showing the remaining time.</li>
+                <li>Players must score as high as possible before time runs out.</li>
+            </ul>
+
+            <p><strong>Difficulties Faced:</strong> Score Table For The Player</p>
         </div>
     </div>
-    <audio id="hitSound" src="blocker_hit.ogg"></audio>
-    <audio id="loseSound" src="target_hit.ogg"></audio>
+
+    <audio id="hitSound" src="Sound/blocker_hit.ogg"></audio>
+    <audio id="loseSound" src="Sound/target_hit.ogg"></audio>
+    <audio id="backgroundMusic" loop>
+        <source src="Sound/stranger-things-124008.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
 
     <script>
         const users = [{ username: 'p', password: 'testuser' }];
 
         function backToSettings() {
-            clearInterval(gameInterval); 
-            showScreen('config'); 
+            clearInterval(gameInterval);
+            showScreen('config');
         }
 
         function showScreen(screenId) {
@@ -202,10 +224,10 @@
             alert("Registration successful!");
             document.getElementById('regUsername').value = "";
             document.getElementById('regPassword').value = "";
-            document.getElementById('regConfirmPassword').value ="";
-            document.getElementById('firstName').value="";
-            document.getElementById('lastName').value="";
-            document.getElementById('email').value="";
+            document.getElementById('regConfirmPassword').value = "";
+            document.getElementById('firstName').value = "";
+            document.getElementById('lastName').value = "";
+            document.getElementById('email').value = "";
             showScreen('login');
             return false;
         }
@@ -294,8 +316,6 @@
             const color = document.getElementById('shipColor').value;
             document.getElementById('colorPreview').style.backgroundColor = color;
         }
-
-
 
     </script>
 </body>
