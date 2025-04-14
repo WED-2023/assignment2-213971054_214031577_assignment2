@@ -139,9 +139,8 @@
 
     <audio id="hitSound" src="Sound/blocker_hit.ogg"></audio>
     <audio id="loseSound" src="Sound/target_hit.ogg"></audio>
-    <audio id="backgroundMusic" loop>
+    <audio id="backgroundMusic">
         <source src="Sound/stranger-things-124008.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
     </audio>
 
     <script>
@@ -152,6 +151,8 @@
             showScreen('config');
         }
 
+        const backgroundMusic = document.getElementById('backgroundMusic');
+
         function showScreen(screenId) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             if (screenId === 'aboutModal') {
@@ -159,8 +160,18 @@
             } else {
                 document.getElementById(screenId).classList.add('active');
                 document.getElementById('aboutModal').style.display = 'none';
+
+                // Stop background music when leaving the game screen
+                if (screenId !== 'game') {
+                    backgroundMusic.pause();
+                }
+                // Start background music when entering the game screen
+                if (screenId === 'game') {
+                    backgroundMusic.play();
+                }
             }
         }
+
 
         function hideModal() {
             document.getElementById('aboutModal').style.display = 'none';
