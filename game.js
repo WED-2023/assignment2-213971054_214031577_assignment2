@@ -183,41 +183,27 @@ function gameLoop() {
         speedLevel++;
         lastSpeedIncreaseTime = currentTime;
     }
-
     drawEnemies();
     moveEnemies();
     handleEnemyBullet();
-
     drawUI();
     updateTimeDisplay();
 }
 
 function handleEnemyBullet() {
-    if (!enemyBullet) {
-        // choose random shooter
-        let shooters = enemies.filter(e => e.alive);
-        if (shooters.length) {
-            let shooter = shooters[Math.floor(Math.random() * shooters.length)];
-            enemyBullet = {
-                x: shooter.x + shooter.width / 2 - 2.5,
-                y: shooter.y + shooter.height,
-                width: 5,
-                height: 10,
-                speed: enemyBulletSpeed
-            };
-        }
-    } else {
-        enemyBullet.y += enemyBullet.speed;
+    // Move existing bullets
+    enemyBullets.forEach((bullet, index) => {
+        bullet.y += bullet.speed;
         ctx.fillStyle = "red";
         ctx.beginPath();
-        ctx.arc(enemyBullet.x + enemyBullet.width / 2, enemyBullet.y + enemyBullet.height / 2, 5, 0, Math.PI * 2);
+        ctx.arc(bullet.x + bullet.width / 2, bullet.y + bullet.height / 2, 5, 0, Math.PI * 2);
         ctx.fill();
-        // check hit on player
+        // Check collision with player
         if (
-            enemyBullet.x < player.x + player.width &&
-            enemyBullet.x + enemyBullet.width > player.x &&
-            enemyBullet.y < player.y + player.height &&
-            enemyBullet.y + enemyBullet.height > player.y
+            bullet.x < player.x + player.width &&
+            bullet.x + bullet.width > player.x &&
+            bullet.y < player.y + player.height &&
+            bullet.y + bullet.height > player.y
         ) {
             lives--;
             if (lives <= 0) {
@@ -225,18 +211,44 @@ function handleEnemyBullet() {
             } else {
                 resetPlayerPosition();
             }
-            enemyBullet = null;
+            enemyBullets.splice(index, 1); // Remove bullet on hit
+            return;
         }
-        // reset if off screen
-        if (enemyBullet.y > canvas.height * 0.75) {
-            enemyBullet = null;
+        // Fire another bullet at 75% screen height
+        if (!bullet.firedNext && bullet.y >= canvas.height * 0.75) {
+            bullet.firedNext = true;
+            fireEnemyBullet(); // Fire a new one
         }
+        // Remove if off-screen (100%)
+        if (bullet.y > canvas.height) {
+            enemyBullets.splice(index, 1);
+        }
+    });
+
+    // If no bullets at all, shoot at least one
+    if (enemyBullets.length === 0) {
+        fireEnemyBullet();
+    }
+}
+
+function fireEnemyBullet() {
+    const shooters = enemies.filter(e => e.alive);
+    if (shooters.length) {
+        const shooter = shooters[Math.floor(Math.random() * shooters.length)];
+        enemyBullets.push({
+            x: shooter.x + shooter.width / 2 - 2.5,
+            y: shooter.y + shooter.height,
+            width: 5,
+            height: 10,
+            speed: enemyBulletSpeed,
+            firedNext: false
+        });
     }
 }
 
 function resetPlayerPosition() {
     player.x = Math.random() * (canvas.width - 280);
-    player.y = canvas.height * 0.6;
+    player.y = canvas.height - 40;
 }
 
 function drawEnemies() {
