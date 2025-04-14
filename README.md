@@ -1,16 +1,24 @@
-# Space Blaster - HTML5 Game
+# 🚀 Space Blaster - HTML5 Game
 
-Created by:  
+**Created by:**  
 - Hussein Hasanin | ID: 213971054  
-- Dania Dabbah   | ID: 214031577  
+- Dania Dabbah     | ID: 214031577  
 
-## Game Description:
-A space shooter game built with HTML, CSS, and JavaScript. Includes registration, login, game configuration, score tracking, and fun alien shooting mechanics.
+## 🎮 Game Description
 
-## Link to Game:
-👉 [Play Here](https://your-username.github.io/ID1_ID2_assignment2](https://wed-2023.github.io/assignment2-213971054_214031577_assignment2/)
+**Space Blaster** is a fast-paced space shooter built with **HTML**, **CSS**, and **JavaScript**. Players battle waves of alien invaders while managing lives, collecting points, and racing against the clock.
 
-## Notes:
-- Fully responsive in 1366x768 resolution
-- Includes sound effects, timer, scoring system, and enemy logic
-- Implemented bonus: diagonal movement of enemies and bullets 🚀
+### 🔧 Features:
+- User registration and login system
+- Game configuration (number of enemies, player speed, etc.)
+- Real-time scoring system
+- Game timer
+- Sound effects for actions (shooting, hits, etc.)
+- Dynamic enemy logic
+- Responsive design (optimized for 1366x768 resolution)
+
+## ▶️ Play the Game
+
+👉 [Play Here](https://wed-2023.github.io/assignment2-213971054_214031577_assignment2/)
+
+
