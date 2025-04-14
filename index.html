@@ -172,10 +172,11 @@
             }
         }
 
-
         function hideModal() {
             document.getElementById('aboutModal').style.display = 'none';
+            showScreen('welcome'); // Show the Welcome screen again
         }
+
 
         window.onclick = function (event) {
             const modal = document.getElementById('aboutModal');
