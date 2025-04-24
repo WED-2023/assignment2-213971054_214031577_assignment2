@@ -17,7 +17,10 @@
 
         <nav>
             <button onclick="showScreen('welcome')">Welcome</button>
+            <button onclick="showScreen('login')">Login</button>
+            <button onclick="showScreen('register')">register</button>
             <button onclick="showScreen('aboutModal')">About</button>
+            <button onclick="logout()" style="display: none;">Logout</button>
         </nav>
 
         <main>
@@ -262,10 +265,20 @@
 
             document.getElementById('loginUsername').value = "";
             document.getElementById('loginPassword').value = "";
+            document.querySelector("nav button[onclick='logout()']").style.display = "inline-block";
 
             showScreen('config');
             return false;
         }
+
+        function logout() {
+            currentPlayer = null;
+            scoreHistory = [];
+            alert("Logged out successfully!");
+            showScreen('welcome');
+            document.querySelector("nav button[onclick='logout()']").style.display = "none";
+        }
+
 
         let playerSettings = {};
 
