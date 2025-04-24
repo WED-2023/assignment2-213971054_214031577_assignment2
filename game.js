@@ -132,29 +132,23 @@ function drawRestrictedAreaLine() {
     ctx.stroke();
 }
 
+
 function moveEnemies() {
-    let edgeReachedX = false;
-    let edgeReachedY = false;
+    let edgeReached = false;
 
     enemies.forEach(e => {
         if (!e.alive) return;
-
         e.x += enemySpeed * enemyDirection;
-        e.y += 0.05 * enemyDirection; // subtle Y movement to simulate drifting
 
-        if (e.x + e.width >= canvas.width || e.x <= 0) {
-            edgeReachedX = true;
-        }
-        if (e.y + e.height >= canvas.height || e.y <= 0) {
-            edgeReachedY = true;
+        if (e.x + e.width >= canvas.width - 280 || e.x <= 0) {
+            edgeReached = true;
         }
     });
 
-    if (edgeReachedX || edgeReachedY) {
+    if (edgeReached) {
         enemyDirection *= -1;
     }
 }
-
 
 function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
