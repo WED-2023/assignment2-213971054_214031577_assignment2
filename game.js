@@ -3,6 +3,7 @@ const ctx = canvas.getContext("2d");
 let enemyDirection = 1;
 let enemySpeed = 1;
 
+
 let player, keysPressed, score, lives, timer, startTime, enemies = [], bullets = [], enemyBullets = [], speedLevel = 1, maxSpeedLevel = 4;
 let gameInterval;
 
@@ -15,6 +16,10 @@ let currentPlayer = null;
 
 let lastSpeedIncreaseTime = Date.now();
 let enemyBulletSpeed = 3;
+
+let playerStartX = Math.random() * (canvas.width - 280);
+let playerStartY = canvas.height - 40;
+
 
 function rungame(fromNewGame = false) {
     if (fromNewGame) {
@@ -29,14 +34,17 @@ function rungame(fromNewGame = false) {
     bullets = [];
     enemyBullets = [];
     startTime = Date.now();
+
     player = {
-        x: Math.random() * (canvas.width - 280),
-        y: canvas.height - 40,
+        x: playerStartX,
+        y: playerStartY,
         width: 40,
         height: 40,
         color: playerSettings.shipColor,
         speed: 5
     };
+
+
 
     enemySpeed = 1;
     enemyBulletSpeed = 3;
@@ -50,6 +58,11 @@ function rungame(fromNewGame = false) {
     clearInterval(gameInterval);
     gameInterval = setInterval(gameLoop, 1000 / 60);
     updateTimeDisplay();
+}
+
+function resetPlayerPosition() {
+    player.x = playerStartX;
+    player.y = playerStartY;
 }
 
 function shootBullet() {
@@ -246,10 +259,7 @@ function fireEnemyBullet() {
     }
 }
 
-function resetPlayerPosition() {
-    player.x = Math.random() * (canvas.width - 280);
-    player.y = canvas.height - 40;
-}
+
 
 function drawEnemies() {
     enemies.forEach(e => {
